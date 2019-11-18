@@ -1,0 +1,361 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[dvips]{graphicx}
+\usepackage[cp1250]{inputenc}
+\usepackage{listings}
+
+\textheight 23.2 cm
+
+\textwidth 6.0 in
+
+\hoffset = -0.5 in
+
+\voffset = -2.4 cm
+
+\hyphenation{}
+
+\frenchspacing
+
+\begin{document}
+
+%\thispagestyle{empty}
+
+\vspace*{3ex}
+\begin{flushright}
+{\large 15 April 2019}
+\end{flushright}
+
+\begin{flushleft}
+{\large Patryk \.Walczak\\
+Group 2}
+\end{flushleft}
+
+\hskip3cm
+
+\begin{center}
+
+{\large Project 14}
+
+\Large {\bf  Solving a system of equations $Ax=b$, \\ where $ A\in \mathbb{R}^{n \times n }$  is a Hessenberg matrix \\by the Jacobi method.}
+
+\vskip2ex
+
+\end{center}
+
+\pagebreak
+
+\begin{center}
+\section{Method description}
+\end{center}
+
+\bigskip In  linear algebra and numerical analysis, a Hessenberg matrix is a special kind of square matrix, which has zero entries below the first subdiagonal.
+
+\vskip20pt
+\[
+\begin{pmatrix}
+    x_{11}       & x_{12} & x_{13}   & x_{14} & \dots & x_{1n} \\
+    x_{21}       & x_{22} & x_{23}  & x_{24}& \dots & x_{2n} \\
+    0	           & x_{32} & x_{33}  & x_{34}& \dots & x_{3n} \\
+    0	           & 0          & x_{43} & x_{44} & \dots & x_{4n} \\
+    \vdots       & \vdots  & \vdots  & \ddots & \ddots & \vdots \\
+    0              & 0            & 0          & \dots   & x_{n n-1} & x_{nn}
+\end{pmatrix}
+\]
+\vskip20pt
+
+\bigskip The Jacobi method is an iterative process for solving system of linear equations\\ $Ax=b$, 
+where $ A\in\mathbb{R}^{n \times n }$,\\
+$ b\in\mathbb{R}^{n}$ and $ a_{ii}\neq 0 $ for $ i = 1, . . . , n $. 
+
+The method starts from a given initial guess $ x(0) $ it constructs a sequence $ x(k) $ of consecutive approximations, such that $ x(k) \rightarrow x$ as $k \rightarrow \infty $.
+
+\begin{equation*}
+x_{1} = ( b_{1} - \sum_{j=2}^n a_{1j}\cdot x_{j} )/ a_{11}
+\end{equation*}
+\begin{equation*}
+x_{2} = ( b_{2} - \sum_{j=1,j\neq2}^n a_{2j}\cdot x_{j} ) / a_{22}
+\end{equation*}
+\begin{equation*}
+\vdots
+\end{equation*}
+\begin{equation*}
+x_{n} = ( b_{n} - \sum_{j=n-1}^n a_{nj}\cdot x_{j} ) / a_{nn}
+\end{equation*}
+
+But in the project considering is only Hessenberg matrix, so the amount of iteration can be lower.
+
+\begin{equation*}
+x_{1} = ( b_{1} - \sum_{j=2}^n a_{1j}\cdot x_{j} ) / a_{11}
+\end{equation*}
+\begin{equation*}
+\vdots
+\end{equation*}
+\begin{equation*}
+x_{m} = ( b_{m} - \sum_{j=m-1,j\neq m}^n a_{mj}\cdot x_{j} ) / a_{mm} \textrm{ for } m \in \langle 2 , n ) \,
+\end{equation*}
+
+Starting from a given initial guess $ x^{(0)} = (x_{1}^{(0)} , . . . , x_{n}^{(0)} )^T \in \mathbb{R}^{n}$
+we use the above formulas to compute the approximations $x^{(k)}$.
+
+\begin{equation*}
+x_{1}^{(0)} = ( b_{1} - \sum_{j=2}^n a_{1j}\cdot x_{1}^{(0)} ) / a_{11}
+\end{equation*}
+\begin{equation*}
+\vdots
+\end{equation*}
+\begin{equation*}
+x_{m}^{(0)} = ( b_{m} - \sum_{j=m-1,j\neq m}^n a_{mj}\cdot x_{j}^{(0)} ) / a_{mm} \textrm{ for } m \in \langle 2 , n ) \,
+\end{equation*}
+
+\vskip3ex
+
+\vskip3ex
+Possible stopping criteria in my algorithm:
+\medskip
+\begin{enumerate}
+\item{ $\|x^{(k+1)}-x^{(k)}\| <$  tolerance, which is set up by user.} 
+\item{Number of iteration reaches the limit,  which is set up by user.}
+\end{enumerate}
+
+When the Jacobi method convergent, then it gives correct solution, otherwise limit of iteration has to occure. 
+
+\pagebreak
+
+\begin{center}
+\section{Description of Matlab program}
+\end{center}
+
+\noindent After run the program, the Menu appears:
+
+\vskip3ex
+\begin{center}
+\hspace*{-2ex}
+\begin{tabular}{|c|} \hline
+\\
+{\bf Menu}
+\\\\Change Hessenber matrix A
+\\\\Change vector b
+\\\\Change number of maximal iterations
+\\\\Change tolerance
+\\\\Display variables
+\\\\Change example
+\\\\Compute Ax=b
+\\\\FINISH
+\\\\
+\hline
+\end{tabular}
+\end{center}
+
+\vskip3ex
+After pushing:
+\begin{itemize}
+\item Change Hessenber matrix A - user will be able to input their own matrix. The program checks if it is Hessenberg matrix and if not the substitue matrix is choosen
+\item Change vector b - user will be able to input their own vector.
+\item Change number of maximal iterations - user will be able to input their own limit of iterations.
+\item Change tolerance - user will be able to input their own tolerance of error.
+\item Display variables -  user will be able to see all variables.
+\item Change example - change the default variables.
+\item Compute Ax=b - program will check if size of A and b are correct, if that's true program will compute spectral radius of matrix A, condition number of matrix A, values of x and number of needed iterations.
+\item FINISH - program will finish.
+\end{itemize}
+
+\pagebreak
+
+\noindent MATLAB functions:
+\begin{enumerate}
+\item Menu.m - script for graphic interface of menu, which uses rest of functions.
+\item Jacobi\_Method.m - function strictly for computing system of equationm Ax=b using Jacobi method, spectral radius of matrix A, condition number of matrix A, return solve of equation and number of iterations.
+\item Is\_Hessenberg.m - fuction checking if the input Matrix is a Hesseneberg matrix, return input matrix if it is true, and hess(input matrix) if that's false.
+
+\noindent ({\bf Note.} \emph{All source codes can be found in section 5.})
+\end{enumerate}
+
+\vskip20pt
+
+\begin{center}
+\section{Numerical tests}
+\end{center}
+
+\vskip20pt
+
+\noindent
+All the numerical tests are included in the Menu.m file, while user pushes button 'Change example', the example data are changed. Program computes spectral radius of matrix A, condition number of matrix A, values of x and number of needed iterations for input data.
+In every test the variables are different, for checking the correctnes of program there is error also.
+
+\[
+error=\dfrac{\|X-Z\|}{\|Z\|},
+\]
+
+The spectral radius of matrix $A$:
+rho\_A=max(abs(eig(A))).
+
+Find the condition number of $A$: 
+$cond(A)= \|A^{-1}\|  \cdot  \|A\|$.
+
+\bigskip
+
+\textbf{Tests:}
+
+$x$ is the result we obtain using our implemented Jacobi\_method function, whereas $Z$ is the predefined solution wich was used to get vector $b$ by multiplication $b=A*Z$.
+
+\begin{enumerate}
+
+\vskip20pt
+
+\item
+
+\[
+A= \begin{pmatrix}
+   10.0000 &  -0.0000 &        0      &        0\\
+   -0.0000  & 10.0000 &  -0.0000 &        0\\
+         0       & -0.0000 & 13.0000  & -1.7321\\
+         0       &  0           &-1.7321   & 11.0000\\
+\end{pmatrix}\textbf{, }
+b= \begin{pmatrix}
+   10.0000\\
+   20.0000\\
+   32.0718\\
+   38.8038\\
+\end{pmatrix}\textbf{,}
+\]
+
+\[
+\textrm{ max iterator= 100, tolerance= $1.0000e^{-6}$  }
+\]
+
+\pagebreak
+
+
+Result:
+
+Spectral radius of A is equal 0.144841 \\
+Condition number of A is equal 1.400000\\ 
+After 8 iteriations result is:\\
+\[
+\begin{pmatrix}
+   1.0000\\
+    2.0000\\
+    3.0000\\
+    4.0000\\
+\end{pmatrix}
+\]
+
+\[
+\textrm{And error is equal:$ 2.518573e^{-8}$ }
+\]
+
+In the test the error is really small, and number of iteration didn't reach the limit, so result is  correct.
+
+\item
+
+\[
+A= \begin{pmatrix}
+    4.0000  &       0   & 3.6056\\
+   -3.6056   &-3.3077 &   5.5385\\
+         0   & 4.5385  &  6.3077\\
+\end{pmatrix}\textbf{, }
+b= \begin{pmatrix}
+  129.3499\\
+  167.0017\\
+  106.7692\\
+\end{pmatrix}\textbf{,}
+\]
+
+\[
+\textrm{ max iterator= 100,$1.0000e^{-6}$  }
+\]
+
+Result:
+
+Spectral radius of A is equal 1.201809 \\
+Condition number of A is equal 2.281605 \\
+After 100 iteriations result is:
+\[
+\begin{pmatrix}
+  1.0e+09\\
+   -0.6466\\
+    3.0451\\
+   -2.3594\\
+\end{pmatrix}
+\]
+
+\[
+\textrm{ And error is equal: $1.242046e^{8}$ }
+\]
+
+In the test the error is really big, and number of iteration reached the limit, so result is incorrect.
+
+\item
+
+\[
+A= \begin{pmatrix}
+    8.6364  &  1.1499    &     0  &       0\\
+    1.1499   &10.8636 &   1.6583 &        0\\
+         0    &1.6583 &  11.5000   & 3.1623\\
+         0      &   0  &  3.1623   & 8.0000\\
+\end{pmatrix}\textbf{, }
+b= \begin{pmatrix}
+   10.9362\\
+   27.8521\\
+   50.4657\\
+   41.4868\\
+\end{pmatrix}\textbf{,}
+\]
+
+\[
+\textrm{ max iterator= 100, tolerance= $1.0000e^{-6}$  }
+\]
+
+Result:
+
+Spectral radius of A is equal 0.365116 \\
+Condition number of A is equal 2.359728 \\
+After 16 iteriations result is:\\
+\[
+\begin{pmatrix}
+    1.0000\\
+    2.0000\\
+    3.0000\\
+    4.0000\\
+\end{pmatrix}
+\]
+
+\[
+\textrm{ And error is equal: $3.517808e^{-8}$ }
+\]
+
+In the test the error is really low, and number of iteration didn't reach the limit, so result is correct.
+
+\end{enumerate}
+
+
+\begin{center}
+\section{Conclusion}
+\end{center}
+
+\begin{flushleft}
+As the test shows, the Jacobi method is not correct when it is divergent. But if it is convergent the correct answer occurs. For Hessenberg matrix many computations are ommited, so the result appears after lower amount of iterations. In the second test after one hunderd iteration there is no result, and the error is huge. On the other hand, in first and second test Jacobi methos gived result. Moreover, when spectral radius is bigger then one (as in second test) method is not convergent, but if it is lower then one (as in the rest of tests) method is convergent.
+\end{flushleft}
+
+\begin{center}
+\item \section{Source Codes}
+\end{center}
+
+{\bf Is\_Hessenberg.m :}
+\lstinputlisting{Is_Hessenberg.m}
+
+\pagebreak
+
+{\bf Jacobi\_Method.m :}
+\lstinputlisting{Jacobi_Method.m}
+
+\pagebreak
+
+{\bf Menu.m:}
+\lstinputlisting{Menu.m}
+
+\end{document}
